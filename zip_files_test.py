@@ -15,5 +15,7 @@ def test_zip_file_names():
 def test_zip_file_contents():
     with ZipFile(os.path.join(utils.TMP_PATH, "resources.zip")) as zip_file:
         for file in zip_file.namelist():
-            with open(os.path.join(utils.RESOURCES_PATH, file), 'rb') as f:
+            original_file = os.path.join(utils.RESOURCES_PATH, file)
+            assert zip_file.getinfo(file).file_size == os.path.getsize(original_file)
+            with open(original_file, 'rb') as f:
                 assert zip_file.read(file) == f.read()
